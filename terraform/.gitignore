@@ -1,0 +1,26 @@
+# Terraform state
+*.tfstate
+*.tfstate.*
+
+# Terraform variables (real values)
+terraform.tfvars
+*.auto.tfvars
+*.auto.tfvars.json
+
+# Crash logs
+crash.log
+crash.*.log
+
+# Terraform CLI / lock / plan
+.terraform/
+.terraform.lock.hcl
+*.tfplan
+
+# Override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Editor / OS
+.DS_Store
