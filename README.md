@@ -1,32 +1,55 @@
 # Kubernetes Infrastructure on AWS with Terraform
 
 ## Overview
-This project demonstrates how to provision a Kubernetes-ready infrastructure on AWS using Terraform.
-The goal is to simulate a production-like environment focusing on scalability, reproducibility, and automation.
+This project provisions a production-style Kubernetes platform on AWS using Terraform.
+The goal is to demonstrate automation-first infrastructure design with environment separation,
+repeatable provisioning, and operational readiness (not a minimal demo setup).
 
 ## Architecture
+> **Current state:** VPC and Terraform project structure are implemented.  
+> **Planned:** EKS cluster, managed node groups, and IRSA will be provisioned incrementally.
+
 - AWS VPC with public and private subnets
-- EC2 instances prepared for Kubernetes workloads
-- Infrastructure provisioned and managed using Terraform
+- Amazon EKS as the Kubernetes control plane
+- Managed node groups for worker nodes
+- IAM Roles for Service Accounts (IRSA) for secure AWS access
+- Terraform-managed infrastructure (modular, version-controlled)
 
-## Why Terraform?
-Terraform allows infrastructure to be defined as code, making environments reproducible,
-version-controlled, and easy to destroy or recreate.
+## Design Decisions
+- Infrastructure as Code (Terraform) as the single source of truth
+- Environment separation (dev / prod) to reduce drift and increase reliability
+- Remote state + state locking (S3 + DynamoDB) to prevent concurrent changes
+- Separation of concerns: infrastructure provisioning vs. application deployment
 
-## Kubernetes Layer
-Kubernetes is used to orchestrate containerized applications on top of the provisioned AWS infrastructure.
-Basic deployments and services are configured to validate cluster functionality.
+## CI/CD Strategy (Planned)
+GitLab CI/CD will automate infrastructure workflows:
+- `terraform fmt` / `validate`
+- static analysis and security scanning (tflint, tfsec/trivy)
+- `terraform plan` generated for merge request review
+- controlled `apply` with manual approval for production
 
-## CI/CD (Planned)
-- Infrastructure validation
-- Automated deployment pipeline
+## Security (Planned)
+- Least-privilege IAM and IRSA for Kubernetes workloads
+- No long-lived AWS credentials inside the cluster
+- Secrets managed via AWS Secrets Manager or SSM (future enhancement)
 
 ## Observability (Planned)
-- Metrics
-- Logging
-- Alerting
+- Prometheus for metrics
+- Grafana dashboards for visibility
+- Centralized logging (Loki/ELK) to support debugging and incident response
+- Alerting via Alertmanager
 
-## What I Learned
-- Designing cloud infrastructure using Terraform
-- Preparing AWS resources for Kubernetes
-- Common challenges when bootstrapping Kubernetes on AWS
+## Repository Structure
+- `terraform/` : Terraform code (modules and environments)
+- `diagrams/`  : Architecture diagrams and documentation assets
+
+## Roadmap
+- [ ] Remote state backend (S3 + DynamoDB locking)
+- [ ] EKS module (cluster + node groups + IRSA)
+- [ ] GitLab CI pipeline for plan/apply workflow
+- [ ] GitOps with Argo CD for app delivery
+- [ ] Observability stack (Prometheus/Grafana/Loki)
+
+## Notes
+- Focused on production realism: automation, security, and operational practices
+- Designed to be extended incrementally as a portfolio-quality platform project
