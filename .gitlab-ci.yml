@@ -1,0 +1,48 @@
+stages:
+  - validate
+  - plan
+  - apply
+  - destroy
+
+variables:
+  TF_IN_AUTOMATION: "true"
+  TF_INPUT: "false"
+  TF_WORKDIR: "terraform/environments/dev"
+  AWS_DEFAULT_REGION: "us-east-1"
+
+default:
+  image: hashicorp/terraform:1.7.5
+  before_script:
+    - terraform --version
+    - cd "$TF_WORKDIR"
+    - terraform init -input=false
+
+validate:
+  stage: validate
+  script:
+    - terraform fmt -check -recursive
+    - terraform validate
+
+plan:
+  stage: plan
+  script:
+    - terraform plan -out=tfplan
+  artifacts:
+    name: "tfplan-$CI_COMMIT_SHORT_SHA"
+    paths:
+      - $TF_WORKDIR/tfplan
+    expire_in: 1 day
+
+apply:
+  stage: apply
+  needs: ["plan"]
+  script:
+    - terraform apply -auto-approve tfplan
+
+destroy:
+  stage: destroy
+  needs: ["apply"]
+  script:
+    - sleep 600
+    - terraform destroy -auto-approve
+  when: always
