@@ -1,5 +1,5 @@
 # Dev environment root
-# Next: VPC + EKS will be added here.
+# Provisions VPC and EKS resources for the dev environment.
 terraform {
   required_version = ">= 1.5.0"
 }
