@@ -1,55 +1,81 @@
 # Kubernetes Infrastructure on AWS with Terraform
 
 ## Overview
-This project provisions a production-style Kubernetes platform on AWS using Terraform.
-The goal is to demonstrate automation-first infrastructure design with environment separation,
-repeatable provisioning, and operational readiness (not a minimal demo setup).
+This project provisions a production-style Kubernetes platform on AWS using Terraform. The goal is to demonstrate automation-first infrastructure design with environment separation, repeatable provisioning, and operational readiness rather than a minimal demo setup.
+
+## Current Implementation
+The current implementation includes:
+
+- Terraform bootstrap for remote state infrastructure
+- Amazon S3 backend for Terraform state
+- DynamoDB table for state locking
+- AWS VPC with public and private subnets across multiple Availability Zones
+- Amazon EKS cluster provisioned with Terraform
+- EKS managed node group for worker nodes
+- Environment-based structure for infrastructure organization
 
 ## Architecture
-> **Current state:** VPC and Terraform project structure are implemented.  
-> **Planned:** EKS cluster, managed node groups, and IRSA will be provisioned incrementally.
+The platform is designed around the following components:
 
 - AWS VPC with public and private subnets
-- Amazon EKS as the Kubernetes control plane
-- Managed node groups for worker nodes
-- IAM Roles for Service Accounts (IRSA) for secure AWS access
-- Terraform-managed infrastructure (modular, version-controlled)
+- Amazon EKS as the managed Kubernetes control plane
+- EKS managed node groups for worker nodes
+- Terraform-managed infrastructure with reusable environment structure
+- Remote state and locking for safer infrastructure workflows
 
 ## Design Decisions
-- Infrastructure as Code (Terraform) as the single source of truth
-- Environment separation (dev / prod) to reduce drift and increase reliability
-- Remote state + state locking (S3 + DynamoDB) to prevent concurrent changes
-- Separation of concerns: infrastructure provisioning vs. application deployment
+- **Infrastructure as Code as the single source of truth**  
+  All infrastructure is defined declaratively in Terraform to improve consistency, traceability, and repeatability.
 
-## CI/CD Strategy (Planned)
-GitLab CI/CD will automate infrastructure workflows:
-- `terraform fmt` / `validate`
-- static analysis and security scanning (tflint, tfsec/trivy)
-- `terraform plan` generated for merge request review
-- controlled `apply` with manual approval for production
+- **Environment separation**  
+  Infrastructure is organized by environment to reduce drift and support safer changes over time.
 
-## Security (Planned)
-- Least-privilege IAM and IRSA for Kubernetes workloads
-- No long-lived AWS credentials inside the cluster
-- Secrets managed via AWS Secrets Manager or SSM (future enhancement)
+- **Remote state with locking**  
+  Terraform state is stored in S3 with DynamoDB locking to prevent concurrent modifications and improve workflow safety.
 
-## Observability (Planned)
-- Prometheus for metrics
+- **Separation of concerns**  
+  The project separates bootstrap infrastructure, core platform provisioning, and future application deployment workflows.
+
+## CI/CD Strategy
+Planned GitLab CI/CD workflow:
+
+- `terraform fmt` / `terraform validate`
+- static analysis and security scanning with tools such as `tflint` and `tfsec`
+- `terraform plan` for review in merge requests
+- controlled `apply` with approval for higher-risk environments
+
+## Security
+Current and planned security practices include:
+
+- private subnets for worker nodes
+- IAM-based access control through AWS and EKS
+- remote state protection through encryption and access controls
+- future implementation of IAM Roles for Service Accounts (IRSA) for fine-grained workload permissions
+- future integration with AWS Secrets Manager or SSM for secrets handling
+
+## Observability
+Planned observability improvements include:
+
+- Prometheus for metrics collection
 - Grafana dashboards for visibility
-- Centralized logging (Loki/ELK) to support debugging and incident response
-- Alerting via Alertmanager
+- centralized logging with Loki or ELK
+- alerting with Alertmanager
 
 ## Repository Structure
-- `terraform/` : Terraform code (modules and environments)
-- `diagrams/`  : Architecture diagrams and documentation assets
+- `terraform/bootstrap/` — bootstrap resources for remote state backend
+- `terraform/environments/dev/` — development environment infrastructure
+- `diagrams/` — architecture diagrams and supporting documentation assets
 
 ## Roadmap
-- [ ] Remote state backend (S3 + DynamoDB locking)
-- [ ] EKS module (cluster + node groups + IRSA)
+- [x] Remote state backend (S3 + DynamoDB locking)
+- [x] VPC implementation
+- [x] EKS cluster
+- [x] Managed node group
+- [ ] IRSA configuration
 - [ ] GitLab CI pipeline for plan/apply workflow
-- [ ] GitOps with Argo CD for app delivery
+- [ ] Sample workload deployment with Helm
 - [ ] Observability stack (Prometheus/Grafana/Loki)
+- [ ] GitOps extension with Argo CD
 
 ## Notes
-- Focused on production realism: automation, security, and operational practices
-- Designed to be extended incrementally as a portfolio-quality platform project
+This project is focused on production-style infrastructure patterns, including automation, environment separation, and operational safety. It is being extended incrementally as a portfolio-quality platform engineering project.
