@@ -57,13 +57,13 @@ module "eks" {
   enable_cluster_creator_admin_permissions = true
 
   eks_managed_node_groups = {
-    default = {
-      instance_types = ["t3.small"]
-      min_size     = 1
-      max_size     = 2
-      desired_size = 1
-    }
+  default = {
+    instance_types = [var.node_instance_type]
+    min_size       = var.min_size
+    max_size       = var.max_size
+    desired_size   = var.desired_size
   }
+}
 
   tags = {
     Project     = var.project_name
