@@ -58,10 +58,13 @@ module "eks" {
 
   eks_managed_node_groups = {
     default = {
-      instance_types = [var.node_instance_type]
-      min_size       = var.min_size
-      max_size       = var.max_size
-      desired_size   = var.desired_size
+      instance_types              = [var.node_instance_type]
+      min_size                    = var.min_size
+      max_size                    = var.max_size
+      desired_size                = var.desired_size
+      ami_type                    = "AL2_x86_64"
+      create_launch_template      = false
+      use_custom_launch_template  = false
     }
   }
 
