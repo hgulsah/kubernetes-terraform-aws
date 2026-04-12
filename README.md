@@ -24,17 +24,51 @@ The platform is designed around the following components:
 - Remote state and locking for safer infrastructure workflows
 
 ## Design Decisions
-- **Infrastructure as Code as the single source of truth**  
-  All infrastructure is defined declaratively in Terraform to improve consistency, traceability, and repeatability.
 
-- **Environment separation**  
-  Infrastructure is organized by environment to reduce drift and support safer changes over time.
+### Infrastructure as Code as the single source of truth
+All infrastructure is defined declaratively in Terraform to improve consistency, traceability, and repeatability.
 
-- **Remote state with locking**  
-  Terraform state is stored in S3 with DynamoDB locking to prevent concurrent modifications and improve workflow safety.
+### Environment separation
+Infrastructure is organized by environment to reduce drift and support safer changes over time.
 
-- **Separation of concerns**  
-  The project separates bootstrap infrastructure, core platform provisioning, and future application deployment workflows.
+### Remote state with locking
+Terraform state is stored in S3 with DynamoDB locking to prevent concurrent modifications and improve workflow safety.
+
+### Separation of concerns
+The project separates bootstrap infrastructure, core platform provisioning, and future application deployment workflows.
+
+## Validation
+After provisioning the infrastructure, I validated the environment by:
+
+- updating kubeconfig with the AWS CLI
+- confirming node readiness with `kubectl get nodes`
+- verifying core system pods with `kubectl get pods -A`
+- deploying an nginx workload
+- exposing the workload with a LoadBalancer service
+- confirming external access in the browser
+
+## Validation Screenshots
+
+### Node Ready
+![kubectl get nodes](screenshots/01-kubectl-get-nodes.png)
+
+### System Pods
+![kubectl get pods -A](screenshots/02-kubectl-get-pods-all.png)
+
+### Service Exposure
+![kubectl get svc](screenshots/03-kubectl-get-svc.png)
+
+### Browser Test
+![nginx browser test](screenshots/04-nginx-browser.png)
+
+## Challenges and Fixes
+During the build, I encountered and resolved several practical issues:
+
+- replaced an old S3 backend bucket from a previous AWS account with a new remote state backend
+- cleaned up stale Terraform state from an earlier setup
+- rebuilt AWS CLI authentication using a new AWS account and IAM user
+- resolved EKS managed node group provisioning issues related to Kubernetes version and AMI compatibility
+- validated cluster access and workload readiness using AWS CLI and kubectl
 
 ## CI/CD Strategy
 Planned GitLab CI/CD workflow:
@@ -65,15 +99,16 @@ Planned observability improvements include:
 - `terraform/bootstrap/` — bootstrap resources for remote state backend
 - `terraform/environments/dev/` — development environment infrastructure
 - `diagrams/` — architecture diagrams and supporting documentation assets
+- `screenshots/` — validation screenshots from the running cluster
 
 ## Roadmap
 - [x] Remote state backend (S3 + DynamoDB locking)
 - [x] VPC implementation
 - [x] EKS cluster
 - [x] Managed node group
+- [x] Sample workload deployment and browser validation
 - [ ] IRSA configuration
 - [ ] GitLab CI pipeline for plan/apply workflow
-- [ ] Sample workload deployment with Helm
 - [ ] Observability stack (Prometheus/Grafana/Loki)
 - [ ] GitOps extension with Argo CD
 
