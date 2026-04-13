@@ -3,6 +3,10 @@
 ## Overview
 This project provisions a production-style Kubernetes platform on AWS using Terraform. The goal is to demonstrate automation-first infrastructure design with environment separation, repeatable provisioning, and operational readiness rather than a minimal demo setup.
 
+## Architecture
+
+![Architecture Diagram](diagrams/AWS%20EKS%20Platform%20Architecture%20Provisioned%20with%20Terraform.png)
+
 ## Current Implementation
 The current implementation includes:
 
