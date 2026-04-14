@@ -4,14 +4,11 @@ stages:
 variables:
   TF_WORKDIR: "terraform/environments/dev"
 
-default:
-  image: hashicorp/terraform:1.7.5
-  before_script:
-    - cd "$TF_WORKDIR"
-    - terraform init -backend=false
-
 validate:
   stage: validate
+  image: hashicorp/terraform:1.7.5
   script:
+    - cd "$TF_WORKDIR"
+    - terraform init -backend=false
     - terraform fmt -check -recursive
     - terraform validate
