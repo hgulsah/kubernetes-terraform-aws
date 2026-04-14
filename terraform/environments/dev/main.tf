@@ -24,8 +24,8 @@ module "vpc" {
   public_subnets  = ["10.0.0.0/24", "10.0.1.0/24"]
   private_subnets = ["10.0.10.0/24", "10.0.11.0/24"]
 
-  enable_nat_gateway = true
-  single_nat_gateway = true
+  enable_nat_gateway   = true
+  single_nat_gateway   = true
   enable_dns_hostnames = true
   enable_dns_support   = true
 
@@ -58,13 +58,13 @@ module "eks" {
 
   eks_managed_node_groups = {
     default = {
-      instance_types              = [var.node_instance_type]
-      min_size                    = var.min_size
-      max_size                    = var.max_size
-      desired_size                = var.desired_size
-      ami_type                    = "AL2_x86_64"
-      create_launch_template      = false
-      use_custom_launch_template  = false
+      instance_types             = [var.node_instance_type]
+      min_size                   = var.min_size
+      max_size                   = var.max_size
+      desired_size               = var.desired_size
+      ami_type                   = "AL2_x86_64"
+      create_launch_template     = false
+      use_custom_launch_template = false
     }
   }
 
