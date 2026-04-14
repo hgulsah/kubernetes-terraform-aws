@@ -1,10 +1,21 @@
 # Kubernetes Infrastructure on AWS with Terraform
+Production-style Kubernetes infrastructure on AWS provisioned with Terraform, designed for repeatability, environment separation, and operational readiness.
 
 ## Overview
 This project provisions a production-style Kubernetes platform on AWS using Terraform. The goal is to demonstrate automation-first infrastructure design with environment separation, repeatable provisioning, and operational readiness rather than a minimal demo setup.
 
-## Architecture
+## Tech Stack
+- Terraform
+- AWS
+- Amazon EKS
+- Kubernetes
+- Amazon VPC
+- S3
+- DynamoDB
+- AWS CLI
+- kubectl
 
+## Architecture
 ![Architecture Diagram](diagrams/AWS%20EKS%20Platform%20Architecture%20Provisioned%20with%20Terraform.png)
 
 ## Current Implementation
@@ -18,7 +29,7 @@ The current implementation includes:
 - EKS managed node group for worker nodes
 - Environment-based structure for infrastructure organization
 
-## Architecture
+## Platform Design
 The platform is designed around the following components:
 
 - AWS VPC with public and private subnets
@@ -29,16 +40,16 @@ The platform is designed around the following components:
 
 ## Design Decisions
 
-### Infrastructure as Code as the single source of truth
+### Infrastructure as Code as the Single Source of Truth
 All infrastructure is defined declaratively in Terraform to improve consistency, traceability, and repeatability.
 
-### Environment separation
+### Environment Separation
 Infrastructure is organized by environment to reduce drift and support safer changes over time.
 
-### Remote state with locking
+### Remote State with Locking
 Terraform state is stored in S3 with DynamoDB locking to prevent concurrent modifications and improve workflow safety.
 
-### Separation of concerns
+### Separation of Concerns
 The project separates bootstrap infrastructure, core platform provisioning, and future application deployment workflows.
 
 ## Validation
@@ -47,8 +58,8 @@ After provisioning the infrastructure, I validated the environment by:
 - updating kubeconfig with the AWS CLI
 - confirming node readiness with `kubectl get nodes`
 - verifying core system pods with `kubectl get pods -A`
-- deploying an nginx workload
-- exposing the workload with a LoadBalancer service
+- deploying an NGINX workload
+- exposing the workload with a LoadBalancer Service
 - confirming external access in the browser
 
 ## Validation Screenshots
@@ -77,10 +88,11 @@ During the build, I encountered and resolved several practical issues:
 ## CI/CD Strategy
 Planned GitLab CI/CD workflow:
 
-- `terraform fmt` / `terraform validate`
+- `terraform fmt`
+- `terraform validate`
 - static analysis and security scanning with tools such as `tflint` and `tfsec`
 - `terraform plan` for review in merge requests
-- controlled `apply` with approval for higher-risk environments
+- controlled `terraform apply` with approval for higher-risk environments
 
 ## Security
 Current and planned security practices include:
@@ -89,7 +101,7 @@ Current and planned security practices include:
 - IAM-based access control through AWS and EKS
 - remote state protection through encryption and access controls
 - future implementation of IAM Roles for Service Accounts (IRSA) for fine-grained workload permissions
-- future integration with AWS Secrets Manager or SSM for secrets handling
+- future integration with AWS Secrets Manager or AWS Systems Manager Parameter Store for secrets handling
 
 ## Observability
 Planned observability improvements include:
@@ -100,10 +112,15 @@ Planned observability improvements include:
 - alerting with Alertmanager
 
 ## Repository Structure
-- `terraform/bootstrap/` — bootstrap resources for remote state backend
-- `terraform/environments/dev/` — development environment infrastructure
-- `diagrams/` — architecture diagrams and supporting documentation assets
-- `screenshots/` — validation screenshots from the running cluster
+```bash
+terraform/
+├── bootstrap/           # remote state backend resources
+└── environments/
+    └── dev/             # development environment infrastructure
+
+diagrams/                # architecture diagrams
+screenshots/             # validation screenshots
+```
 
 ## Roadmap
 - [x] Remote state backend (S3 + DynamoDB locking)
@@ -113,7 +130,7 @@ Planned observability improvements include:
 - [x] Sample workload deployment and browser validation
 - [ ] IRSA configuration
 - [ ] GitLab CI pipeline for plan/apply workflow
-- [ ] Observability stack (Prometheus/Grafana/Loki)
+- [ ] Observability stack (Prometheus / Grafana / Loki)
 - [ ] GitOps extension with Argo CD
 
 ## Notes
