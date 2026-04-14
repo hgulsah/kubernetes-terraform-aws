@@ -6,7 +6,9 @@ variables:
 
 validate:
   stage: validate
-  image: hashicorp/terraform:1.7.5
+  image: 
+    name: hashicorp/terraform:1.7.5
+    entrypoint: [""]
   script:
     - cd "$TF_WORKDIR"
     - terraform init -backend=false
