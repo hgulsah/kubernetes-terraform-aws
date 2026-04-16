@@ -1,5 +1,6 @@
 stages:
   - validate
+  - plan
 
 variables:
   TF_WORKDIR: "terraform/environments/dev"
@@ -14,3 +15,17 @@ validate:
     - terraform init -backend=false
     - terraform fmt -check -recursive
     - terraform validate
+
+plan:
+  stage: plan
+  image:
+    name: hashicorp/terraform:1.7.5
+    entrypoint: [""]
+  script:
+    - cd "$TF_WORKDIR"
+    - terraform init
+    - terraform plan -out=tfplan
+  artifacts:
+    paths:
+      - $TF_WORKDIR/tfplan
+    expire_in: 7 days
