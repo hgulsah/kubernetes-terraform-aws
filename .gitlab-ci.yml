@@ -24,7 +24,7 @@ plan:
   script:
     - cd "$TF_WORKDIR"
     - terraform init
-    - terraform plan -out=tfplan
+    - terraform plan -out=tfplan -var-file="terraform.tfvars.example"
   artifacts:
     paths:
       - $TF_WORKDIR/tfplan
