@@ -2,6 +2,7 @@ stages:
   - validate
   - plan
   - apply
+  - destroy
 
 variables:
   TF_WORKDIR: "terraform/environments/dev"
@@ -43,3 +44,14 @@ apply:
   when: manual
   dependencies:
     - plan
+
+destroy:
+  stage: destroy
+  image:
+    name: hashicorp/terraform:1.7.5
+    entrypoint: [""]
+  script:
+    - cd "$TF_WORKDIR"
+    - terraform init
+    - terraform destroy -auto-approve -var-file="terraform.tfvars.example"
+  when: manual
