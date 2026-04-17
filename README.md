@@ -84,15 +84,18 @@ During the build, I encountered and resolved several practical issues:
 - rebuilt AWS CLI authentication using a new AWS account and IAM user
 - resolved EKS managed node group provisioning issues related to Kubernetes version and AMI compatibility
 - validated cluster access and workload readiness using AWS CLI and kubectl
+- configured GitLab CI/CD pipeline with AWS credentials as protected variables
+- resolved Terraform variable input errors in CI by using a var-file
+- resolved IAM permission issues for KMS and CloudWatch during pipeline apply
 
-## CI/CD Strategy
-Planned GitLab CI/CD workflow:
+## CI/CD
 
-- `terraform fmt`
-- `terraform validate`
-- static analysis and security scanning with tools such as `tflint` and `tfsec`
-- `terraform plan` for review in merge requests
-- controlled `terraform apply` with approval for higher-risk environments
+The project includes a working GitLab CI/CD pipeline with the following stages:
+
+- **validate** — runs `terraform fmt` and `terraform validate` without connecting to remote state
+- **plan** — initializes backend, runs `terraform plan`, and saves the plan as an artifact
+- **apply** — applies the saved plan with manual approval required
+- **destroy** — tears down all infrastructure with manual approval required
 
 ## Security
 Current and planned security practices include:
@@ -129,7 +132,7 @@ screenshots/             # validation screenshots
 - [x] Managed node group
 - [x] Sample workload deployment and browser validation
 - [ ] IRSA configuration
-- [ ] GitLab CI pipeline for plan/apply workflow
+- [x] GitLab CI pipeline for plan/apply/destroy workflow
 - [ ] Observability stack (Prometheus / Grafana / Loki)
 - [ ] GitOps extension with Argo CD
 
