@@ -1,6 +1,7 @@
 stages:
   - validate
   - plan
+  - apply
 
 variables:
   TF_WORKDIR: "terraform/environments/dev"
@@ -29,3 +30,16 @@ plan:
     paths:
       - $TF_WORKDIR/tfplan
     expire_in: 7 days
+
+apply:
+  stage: apply
+  image:
+    name: hashicorp/terraform:1.7.5
+    entrypoint: [""]
+  script:
+    - cd "$TF_WORKDIR"
+    - terraform init
+    - terraform apply -auto-approve tfplan
+  when: manual
+  dependencies:
+    - plan
