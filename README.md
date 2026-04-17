@@ -1,3 +1,4 @@
+[![pipeline status](https://gitlab.com/hgihtiyar/kubernetes-terraform-aws/badges/main/pipeline.svg)](https://gitlab.com/hgihtiyar/kubernetes-terraform-aws/-/pipelines)
 # Kubernetes Infrastructure on AWS with Terraform
 Production-style Kubernetes infrastructure on AWS provisioned with Terraform, designed for repeatability, environment separation, and operational readiness.
 
