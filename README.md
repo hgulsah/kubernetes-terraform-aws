@@ -106,6 +106,7 @@ Current and planned security practices include:
 - remote state protection through encryption and access controls
 - future implementation of IAM Roles for Service Accounts (IRSA) for fine-grained workload permissions
 - future integration with AWS Secrets Manager or AWS Systems Manager Parameter Store for secrets handling
+- IRSA implemented for fine-grained workload permissions (S3 read access)
 
 ## Observability
 Planned observability improvements include:
@@ -132,7 +133,7 @@ screenshots/             # validation screenshots
 - [x] EKS cluster
 - [x] Managed node group
 - [x] Sample workload deployment and browser validation
-- [ ] IRSA configuration
+- [x] IRSA configuration
 - [x] GitLab CI pipeline for plan/apply/destroy workflow
 - [ ] Observability stack (Prometheus / Grafana / Loki)
 - [ ] GitOps extension with Argo CD
