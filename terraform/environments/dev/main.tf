@@ -74,3 +74,26 @@ module "eks" {
   }
 }
 
+# IRSA - IAM Roles for Service Accounts
+module "irsa_s3_read" {
+  source  = "terraform-aws-modules/iam/aws//modules/iam-role-for-service-accounts-eks"
+  version = "5.39.0"
+
+  role_name = "${var.project_name}-${var.environment}-s3-read"
+
+  oidc_providers = {
+    main = {
+      provider_arn               = module.eks.oidc_provider_arn
+      namespace_service_accounts = ["default:s3-reader"]
+    }
+  }
+
+  role_policy_arns = {
+    s3_read = "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+  }
+
+  tags = {
+    Project     = var.project_name
+    Environment = var.environment
+  }
+}
