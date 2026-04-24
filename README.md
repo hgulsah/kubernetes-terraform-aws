@@ -109,12 +109,16 @@ Current and planned security practices include:
 - IRSA implemented for fine-grained workload permissions (S3 read access)
 
 ## Observability
-Planned observability improvements include:
 
-- Prometheus for metrics collection
-- Grafana dashboards for visibility
-- centralized logging with Loki or ELK
-- alerting with Alertmanager
+The observability stack is deployed using Helm and includes:
+
+- **Prometheus** for metrics collection
+- **Grafana** for visualization and dashboards
+- **Alertmanager** for alerting
+
+### Grafana Dashboard
+
+![Grafana Dashboard](screenshots/grafana-dashboard.png)
 
 ## Repository Structure
 ```bash
@@ -135,7 +139,7 @@ screenshots/             # validation screenshots
 - [x] Sample workload deployment and browser validation
 - [x] IRSA configuration
 - [x] GitLab CI pipeline for plan/apply/destroy workflow
-- [ ] Observability stack (Prometheus / Grafana / Loki)
+- [x] Observability stack (Prometheus / Grafana)
 - [ ] GitOps extension with Argo CD
 
 ## Notes
