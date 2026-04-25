@@ -17,7 +17,7 @@ This project provisions a production-style Kubernetes platform on AWS using Terr
 - kubectl
 
 ## Architecture
-![Architecture Diagram](diagrams/AWS%20EKS%20Platform%20Architecture%20Provisioned%20with%20Terraform.png)
+![Architecture Diagram](diagrams/aws-eks-platform-architecture.png)
 
 ## Current Implementation
 The current implementation includes:
